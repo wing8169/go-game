@@ -1,0 +1,67 @@
+package views
+
+import "github.com/wing8169/go-game/views/layout"
+
+script renderScreen() {
+    const element = document.getElementById("me");
+    let start, previousTimeStamp;
+    let done = false;
+    let keyPressed = undefined; // w / a / s / d
+    const speed = {
+        "w": 5, "a": 5, "s": 5, "d": 5,
+    };
+
+    function getKeyPress(){
+        document.addEventListener("keydown", (event) => {
+            const key = event.key
+            if(["w", "a", "s", "d"].includes(key)){
+                keyPressed = key;
+            } else {
+                keyPressed = undefined;
+            }
+        });
+    }
+
+    function step(timeStamp) {
+        if(done) return;
+        if(!!keyPressed) {
+             console.log("halo23")
+            element.style.transform = `translateX(${speed[keyPressed]}px)`;
+        }
+        console.log("halo")
+        window.requestAnimationFrame(step);
+        
+        // if (start === undefined) {
+        //     start = timeStamp;
+        // }
+        // const elapsed = timeStamp - start;
+
+        // if (previousTimeStamp !== timeStamp) {
+        //     // Math.min() is used here to make sure the element stops at exactly 200px
+        //     const count = Math.min(0.1 * elapsed, 200);
+        //     element.style.transform = `translateX(${count}px)`;
+        //     if (count === 200) done = true;
+        // }
+
+        // if (elapsed < 2000) {
+        //     // Stop the animation after 2 seconds
+        //     previousTimeStamp = timeStamp;
+        //     if (!done) {
+        //         window.requestAnimationFrame(step);
+        //     }
+        // }
+    }
+
+    window.requestAnimationFrame(step);
+    getKeyPress();
+}
+
+templ Index() {
+	@layout.MainLayout() {
+		<body onload={ renderScreen()  }>
+			<div class="bg-black flex flex-col items-center justify-center w-screen h-screen">
+				<div class="rounded-full w-[100px] h-[100px] bg-red-500" id="me"></div>
+			</div>
+		</body>
+	}
+}
